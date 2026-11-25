@@ -10,6 +10,7 @@
 NNNNNN-problem-slug/
   description.md   # условие (на русском)
   explanation.md   # объяснение решения (по желанию)
+  editorial.md     # ссылка на официальную статью LeetCode (по желанию)
   solution.js
   solution.py
   solution.rs
