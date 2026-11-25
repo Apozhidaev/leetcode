@@ -1,25 +1,25 @@
 # Median of Two Sorted Arrays
 
-## Solution
+## Решение
 
-### Overview
+### Обзор
 
-In this problem, we are given two sorted arrays, `nums1` and `nums2`. We need to return the median of these two arrays.
+Даны два отсортированных массива `nums1` и `nums2`. Нужно вернуть медиану этих двух массивов.
 
 ---
 
-## Approach 1: Merge Sort
+## Подход 1: Merge Sort
 
-### Intuition
+### Идея
 
-Let's start with the straightforward approach. If we put the elements of two arrays in one array `A` and arrange them in order. Assume the merged array has a length of `n`, then the median is:
+Начнём с самого прямого подхода. Если сложить элементы обоих массивов в один массив `A` и упорядочить его, то при длине объединённого массива `n` медиана равна:
 
-- `A[n / 2]`, if `n` is odd;
-- the average of `A[n / 2]` and `A[n / 2 + 1]`, if `n` is even.
+- `A[n / 2]`, если `n` нечётно;
+- среднему `A[n / 2]` и `A[n / 2 + 1]`, если `n` чётно.
 
-However, we do not really need to merge and sort these arrays. Note that both arrays are already sorted, so the smallest element is either the first element of `nums1` or the first element of `nums2`. Therefore, we can set two pointers `p1` and `p2` at the start of each array, then we can get the smallest element from `nums1` and `nums2` by comparing the values `nums1[p1]` and `nums2[p2]`.
+Но на самом деле полностью сливать и сортировать массивы не нужно. Оба массива уже отсортированы, поэтому наименьший элемент — это либо первый элемент `nums1`, либо первый элемент `nums2`. Можно поставить два указателя `p1` и `p2` в начало каждого массива и на каждом шаге брать меньший из `nums1[p1]` и `nums2[p2]`.
 
-Please refer to the following slides as an example:
+Пример на слайдах:
 
 **1 / 12**
 
@@ -69,22 +69,22 @@ Please refer to the following slides as an example:
 
 ![](slides/12.png)
 
-### Algorithm
+### Алгоритм
 
-1. Get the total size of two arrays `m + n`.
-   - If `m + n` is odd, we are looking for the `(m + n) / 2`-th element.
-   - If `m + n` is even, we are looking for the average of the `(m + n) / 2`-th and the `(m + n) / 2 + 1`-th elements.
-2. Set two pointers `p1` and `p2` at the beginning of arrays `nums1` and `nums2`.
-3. If both `p1` and `p2` are in bounds of the arrays, compare the values at `p1` and `p2`:
-   - If `nums1[p1]` is smaller than `nums2[p2]`, we move `p1` one place to the right.
-   - Otherwise, we move `p2` one place to the right.
-   - If `p1` is outside `nums1`, just move `p2` one place to the right.
-   - If `p2` is outside `nums2`, just move `p1` one place to the right.
-4. Get the target elements and calculate the median:
-   - If `m + n` is odd, repeat step 3 by `(m + n + 1) / 2` times and return the element from the last step.
-   - If `m + n` is even, repeat step 3 by `(m + n) / 2 + 1` times and return the average of the elements from the last two steps.
+1. Найти суммарный размер двух массивов `m + n`.
+   - Если `m + n` нечётно, ищем `(m + n) / 2`-й элемент.
+   - Если `m + n` чётно, ищем среднее `(m + n) / 2`-го и `(m + n) / 2 + 1`-го элементов.
+2. Поставить указатели `p1` и `p2` в начало `nums1` и `nums2`.
+3. Если оба указателя в пределах массивов, сравнить значения в `p1` и `p2`:
+   - если `nums1[p1]` меньше `nums2[p2]`, сдвинуть `p1` вправо;
+   - иначе сдвинуть `p2` вправо;
+   - если `p1` вышел за пределы `nums1`, просто сдвинуть `p2` вправо;
+   - если `p2` вышел за пределы `nums2`, просто сдвинуть `p1` вправо.
+4. Найти нужные элементы и посчитать медиану:
+   - если `m + n` нечётно, повторить шаг 3 `(m + n + 1) / 2` раз и вернуть элемент с последнего шага;
+   - если `m + n` чётно, повторить шаг 3 `(m + n) / 2 + 1` раз и вернуть среднее элементов с двух последних шагов.
 
-### Implementation
+### Реализация
 
 ```javascript
 var findMedianSortedArrays = function (nums1, nums2) {
@@ -154,139 +154,138 @@ class Solution:
             return get_min()
 ```
 
-### Complexity Analysis
+### Анализ сложности
 
-Let `m` be the size of array `nums1` and `n` be the size of array `nums2`.
+Пусть `m` — размер `nums1`, а `n` — размер `nums2`.
 
-**Time complexity:** `O(m + n)`
+**Время:** `O(m + n)`
 
-- We get the smallest element by comparing two values at `p1` and `p2`; it takes `O(1)` to compare two elements and move the corresponding pointer to the right.
-- We need to traverse half of the arrays before reaching the median element(s).
-- To sum up, the time complexity is `O(m + n)`.
+- Меньший элемент находится сравнением значений в `p1` и `p2`; сравнение и сдвиг указателя занимают `O(1)`.
+- До медианы нужно пройти примерно половину элементов.
+- Итого временная сложность — `O(m + n)`.
 
-**Space complexity:** `O(1)`
+**Память:** `O(1)`
 
-- We only need to maintain two pointers `p1` and `p2`.
+- Нужны только два указателя `p1` и `p2`.
 
 ---
 
-## Approach 2: Binary Search, Recursive
+## Подход 2: бинарный поиск, рекурсивно
 
-### Intuition
+### Идея
 
-Because the inputs are sorted arrays and the problem asks for a logarithmic time limit, we strongly feel that binary search (or a similar approach) is a promising method. While we're not sure how to cast the same pattern as a normal binary search on this problem, let's go over some steps of a regular binary search and see if we can get any inspiration.
+Вход — отсортированные массивы, а в условии требуется логарифмическая сложность, поэтому бинарный поиск (или что-то похожее) выглядит перспективно. Не сразу ясно, как применить обычный паттерн бинарного поиска к этой задаче, поэтому сначала вспомним шаги обычного бинарного поиска.
 
-Here we use binary search to find `target` in a sorted array `A`:
+Ищем `target` в отсортированном массиве `A`:
 
-1. Locate the middle index (element) of `A`.
-2. Compare the value of the middle element with `target`.
-3. Reduce the search space by cutting the current array in half and discarding the half which is guaranteed not to contain `target`.
-4. Repeat the above process until we either empty the array (move to half of length `0`) or find `target`.
+1. Найти средний индекс (элемент) `A`.
+2. Сравнить значение среднего элемента с `target`.
+3. Сузить пространство поиска: отрезать половину массива, которая гарантированно не содержит `target`.
+4. Повторять, пока массив не опустеет (длина половины станет `0`) или пока не найдём `target`.
 
 ![](figures/bs.png)
 
-At each step, the search space is cut in half, so we can quickly get the result. Now back to this problem where we have two sorted arrays. For the sake of convenience, let's call them `A` and `B`.
+На каждом шаге пространство поиска уменьшается вдвое, поэтому ответ находится быстро. Вернёмся к задаче с двумя отсортированными массивами. Для удобства назовём их `A` и `B`.
 
 ![](figures/2.png)
 
-Similarly, we can get and compare their middle values `A_mid` and `B_mid`. Without loss of generality in this example we assume `A_mid <= B_mid` initially, as shown in the yellow boxes.
+Аналогично можно взять и сравнить их средние значения `A_mid` и `B_mid`. Без потери общности в этом примере считаем, что изначально `A_mid <= B_mid`, как показано жёлтыми рамками.
 
 ![](figures/3.png)
 
-What does this comparison imply?
+Что даёт это сравнение?
 
-It implies that we can compare sections of `A` and `B`.
+Оно позволяет сравнивать уже целые участки `A` и `B`.
 
-For the rest of this article, we will use `≤` to represent the relative magnitude of values in arrays. For example, `A_left ≤ A_right` means that every element in `A_left` is no larger than any element in `A_right`. We also "compare" elements in an array with a single element similarly, for example, `A_left ≤ A_mid` means that every element in `A_left` is no larger than the element `A_mid`.
+Далее в статье знак `≤` означает относительный порядок значений в массивах. Например, `A_left ≤ A_right` значит, что каждый элемент `A_left` не больше любого элемента `A_right`. Аналогично сравниваем участок массива с одним элементом: `A_left ≤ A_mid` значит, что каждый элемент `A_left` не больше `A_mid`.
 
-This may not be the most standard way of expressing it, but is easy enough to understand.
+Это не самый формальный способ записи, но так проще понимать.
 
-Recall that both arrays are sorted, so we know that:
+Так как оба массива отсортированы, известно:
 
 - `A_left ≤ A_mid`
 - `B_mid ≤ B_right`
 
-Combine these observations with the comparison we just made:
+Объединяя это со сравнением, которое только что сделали:
 
 - `A_mid ≤ B_mid`
 
-We have the following result:
+получаем:
 
 - `A_left ≤ A_mid ≤ B_mid ≤ B_right`
 
-Thus:
+и следовательно:
 
 - `A_left ≤ B_right`
 
-As shown in the picture below:
+Как на картинке ниже:
 
 ![](figures/4.png)
 
-Since `A` is sorted, we know that `A_left ≤ A_right`.
+Поскольку `A` отсортирован, также верно `A_left ≤ A_right`.
 
 ![](figures/5.png)
 
-Now we know that `A_left` is smaller than two halves: `A_right` and `B_right`. Although we still don't know where exactly these elements are, what we do know is `A_left` doesn't intersect with `A_right + B_right`! There is an invisible boundary between the `A_left` segment and the mixed segment `A_right + B_right`. As shown in the picture below, the dashed line divides all sorted elements into two halves.
+Теперь понятно, что `A_left` меньше двух половин: `A_right` и `B_right`. Точные позиции элементов ещё неизвестны, но важно другое: `A_left` не пересекается с `A_right + B_right`! Между сегментом `A_left` и смешанным сегментом `A_right + B_right` есть невидимая граница. На картинке ниже пунктир делит все отсортированные элементы на две половины.
 
 ![](figures/6.png)
 
-We can apply all the same logic to the mixed segment `A_left + B_left` and `B_right`, which also do not intersect. You can try to prove it yourself as an exercise.
+Ту же логику можно применить к смешанному сегменту `A_left + B_left` и к `B_right` — они тоже не пересекаются. Это можно доказать самостоятельно как упражнение.
 
 ![](figures/7.png)
 
-It looks somewhat clearer: we have clearly separated some subarrays. How do we continue to leverage this knowledge and use the cut-in-half method repeatedly?
+Картина становится яснее: некоторые подотрезки уже разделены. Как продолжать отрезать половины снова и снова?
 
-**The following step is the most important one.**
+**Следующий шаг — самый важный.**
 
-Remember that we are looking for the median of sorted `A + B`, which is one or two target values. We regard the index of the target value in `sorted(A + B)` as `k`. For example:
+Мы ищем медиану отсортированного `A + B` — одно или два целевых значения. Индекс целевого значения в `sorted(A + B)` обозначим как `k`. Например:
 
-- If the lengths of `A` and `B` are `6` and `5`, the target index is `k = (6 + 5 + 1) / 2 = 6`, we shall look for the 6th smallest element.
-- If the lengths of `A` and `B` are `6` and `6`, the target indexes are `k = (6 + 6) / 2 = 6` and `k + 1 = 7`, we shall look for the 6th and the 7th smallest elements.
+- если длины `A` и `B` равны `6` и `5`, то целевой индекс `k = (6 + 5 + 1) / 2 = 6` — ищем 6-й наименьший элемент;
+- если длины `A` и `B` равны `6` и `6`, то целевые индексы `k = (6 + 6) / 2 = 6` и `k + 1 = 7` — ищем 6-й и 7-й наименьшие элементы.
 
-Depending on whether the total number of elements is odd or even, we need the `k`-th (and maybe the `(k + 1)`-th) elements. What matters is that we set an index `k` at the beginning and we want to find the `k`-th smallest element using the binary-search-like algorithm discussed previously (for convenience, we will discuss only the `k`-th element for now).
+В зависимости от чётности общего числа элементов нужны `k`-й (и, возможно, `(k + 1)`-й) элементы. Главное — в начале зафиксировать индекс `k` и искать `k`-й наименьший элемент описанным выше алгоритмом в духе бинарного поиска (для удобства пока говорим только про `k`-й элемент).
 
-However, during the binary-search-like algorithm, we keep removing one half of an array, so the index `k` might not stay unchanged. Suppose we removed `3` elements that are smaller than the original `k`-th smallest element, we shall look for the `(k − 3)`-th smallest element from the remaining arrays.
+Но во время такого поиска мы постоянно удаляем половину одного из массивов, поэтому индекс `k` может меняться. Если удалили `3` элемента, которые были меньше исходного `k`-го наименьшего, дальше нужно искать `(k − 3)`-й наименьший среди оставшихся.
 
 ![](figures/exp_1.png)
 
-More specifically:
+Конкретнее:
 
-- If `k` is larger than half the total number of elements in `sorted(A + B)`, it means that the `k`-th element is in the second (larger) half of `sorted(A + B)`, thus `A_left` (or `B_left`, the smaller of the two smaller sections according to the comparison) is guaranteed not to contain this element, and we can safely cut this half, and reduce `k` by the length of the removed half.
-- If `k` is not larger than half the total number of elements in `sorted(A + B)`, it means that the `k`-th element is in the first (smaller) half of `sorted(A + B)`, thus `B_right` (or `A_right`, the larger of the two larger sections according to the comparison) is guaranteed not to contain this element, and we can safely discard it. Note that we don't need to modify `k` this time, since we removed one larger half that doesn't affect the order of the `k`-th smallest element.
+- если `k` больше половины числа элементов в `sorted(A + B)`, то `k`-й элемент лежит во второй (большей) половине; значит, `A_left` (или `B_left` — меньшая из двух меньших частей по сравнению) гарантированно его не содержит, эту половину можно отрезать и уменьшить `k` на длину удалённой половины;
+- если `k` не больше половины числа элементов в `sorted(A + B)`, то `k`-й элемент лежит в первой (меньшей) половине; значит, `B_right` (или `A_right` — большая из двух больших частей) его не содержит, и её можно отбросить. При этом `k` менять не нужно: удалили большую половину, которая не влияет на порядок `k`-го наименьшего.
 
-We can continue our search like above in the remaining arrays. The long arrow that starts from the bottom and points to the top-left indicates that we are repeating the process. Once we cut off part of either `A` or `B`, we regard the remaining arrays as modified `A` and `B` and restart this algorithm. Note that the following picture represents one case only: we consider the case that `a_value < b_value`, thus we remove either the smaller half of `A` or the larger half of `B`. If the comparison result is `a_value >= b_value`, we shall remove either the smaller half of `B` or the larger half of `A`.
+Поиск продолжается на оставшихся массивах. Длинная стрелка снизу наверх-влево показывает, что процесс повторяется. Отрезав часть `A` или `B`, оставшееся считаем новыми `A` и `B` и запускаем алгоритм заново. Картинка ниже — только один случай: `a_value < b_value`, поэтому удаляем либо меньшую половину `A`, либо большую половину `B`. Если `a_value >= b_value`, удаляем либо меньшую половину `B`, либо большую половину `A`.
 
 ![](figures/9.png)
 
-That's it. We cut one of the two arrays in half at each step, so this approach has a logarithmic time complexity which we will discuss in detail later.
+На этом идея готова. На каждом шаге отрезаем половину одного из двух массивов, поэтому сложность логарифмическая — разберём её ниже.
 
-**One more thing!**
+**Ещё один момент!**
 
-In the previous picture, we repeat all processes using the modified arrays, but this is just for the sake of understanding. We won't create copies of two arrays repeatedly, because that would introduce a linear time complexity at least. Instead, we just treat a part of the original array as the modified array for the next step, so that we can repeat the process on the original array without making any duplication. To do this, we need to maintain four pointers, two pointers for each array, e.g., `a_start` and `a_end` represent an inclusive range `[a_start, a_end]` of `A`.
+На предыдущей картинке для понимания мы как будто создаём новые массивы. На практике копии делать не будем: это дало бы как минимум линейную сложность. Вместо этого на следующем шаге берём часть исходного массива как «новый» массив. Для этого нужны четыре указателя — по два на каждый массив; например, `a_start` и `a_end` задают включительный диапазон `[a_start, a_end]` в `A`.
 
-### Algorithm
+### Алгоритм
 
-Let's define a function that helps us find the `k`-th smallest element from two inclusive ranges `[a_start, a_end]` and `[b_start, b_end]` from arrays `A` and `B`.
+Определим функцию, которая находит `k`-й наименьший элемент в двух включительных диапазонах `[a_start, a_end]` и `[b_start, b_end]` массивов `A` и `B`.
 
-1. If the range (for example, a range of `A`) is empty, in other words `a_start > a_end`, it means all elements in `A` are passed, we just return the `(k - a_start)`-th element from the other array `B`. Vice versa if `b_start > b_end`.
-2. Otherwise, get the middle indexes of the two ranges: `a_index = (a_start + a_end) / 2`, `b_index = (b_start + b_end) / 2`.
-3. Get the middle values of the two ranges: `a_value = A[a_index]`, `b_value = B[b_index]`.
-4. Cut one array in half, according to:
-   - If `a_index + b_index < k`, cut one smaller half:
-     - If `a_value < b_value`, cut the smaller half of `A`.
-     - Otherwise, cut the smaller half of `B`.
-   - Otherwise, cut one larger half:
-     - If `b_value < a_value`, cut the larger half of `B`.
-     - Otherwise, cut the larger half of `A`.
-5. Repeat step 1 using the new starting and ending indexes of `A` and `B`.
+1. Если диапазон (например, у `A`) пуст, то есть `a_start > a_end`, значит все элементы `A` уже пройдены — вернуть `(k - a_start)`-й элемент из другого массива `B`. Аналогично, если `b_start > b_end`.
+2. Иначе взять средние индексы диапазонов: `a_index = (a_start + a_end) / 2`, `b_index = (b_start + b_end) / 2`.
+3. Взять средние значения: `a_value = A[a_index]`, `b_value = B[b_index]`.
+4. Отрезать половину одного массива:
+   - если `a_index + b_index < k`, отрезать меньшую половину:
+     - если `a_value < b_value` — меньшую половину `A`;
+     - иначе — меньшую половину `B`;
+   - иначе отрезать большую половину:
+     - если `b_value < a_value` — большую половину `B`;
+     - иначе — большую половину `A`.
+5. Повторить шаг 1 с новыми границами `A` и `B`.
 
-Then we move on to find the median elements, and get the length of both arrays `na = len(A)` and `nb = len(B)`.
+Дальше ищем медиану. Пусть `na = len(A)`, `nb = len(B)`.
 
-- If the total number of elements in `A` and `B` is odd, we just use the above function to find the middle element, that is `k = (na + nb) / 2`.
-- Otherwise, we use the function to find two middle elements: `k = (na + nb) / 2 - 1` and `k = (na + nb) / 2`, and return their average.
+- если суммарное число элементов нечётно, вызвать функцию для среднего элемента: `k = (na + nb) / 2`;
+- иначе вызвать для двух средних: `k = (na + nb) / 2 - 1` и `k = (na + nb) / 2`, вернуть их среднее.
 
-
-### Implementation
+### Реализация
 
 ```javascript
 var findMedianSortedArrays = function (A, B) {
@@ -380,82 +379,82 @@ class Solution:
             ) / 2
 ```
 
-### Complexity Analysis
+### Анализ сложности
 
-Let `m` be the size of array `nums1` and `n` be the size of array `nums2`.
+Пусть `m` — размер `nums1`, а `n` — размер `nums2`.
 
-**Time complexity:** `O(log(m · n))`
+**Время:** `O(log(m · n))`
 
-- At each step, we cut one half off from either `nums1` or `nums2`. If one of the arrays is emptied, we can directly get the target from the other array in a constant time. Therefore, the total time spent depends on when one of the arrays is cut into an empty array.
-- In the worst-case scenario, we may need to cut both arrays before finding the target element.
-- One of the two arrays is cut in half at each step, thus it takes logarithmic time to empty an array. The time to empty two arrays are independent of each other.
+- На каждом шаге отрезаем половину либо у `nums1`, либо у `nums2`. Если один массив опустел, ответ из другого берётся за константу. Итого время зависит от того, когда один из массивов станет пустым.
+- В худшем случае перед нахождением ответа нужно «опустошить» оба массива.
+- На каждом шаге один из массивов режется пополам, поэтому опустошение одного массива занимает логарифмическое время. Времена для двух массивов независимы.
 
 ![](figures/tc.png)
 
-Therefore, the time complexity is `O(log m + log n)`.
+Следовательно, временная сложность — `O(log m + log n)`.
 
 `O(log m + log n) = O(log(m · n))`
 
-**Space complexity:** `O(log m + log n)`
+**Память:** `O(log m + log n)`
 
-- Similar to the analysis on time complexity, the recursion steps depend on the number of iterations before we cut an array into an empty array. In the worst-case scenario, we need `O(log m + log n)` recursion steps.
-- However, during the recursive self-call, we only need to maintain 4 pointers: `a_start`, `a_end`, `b_start` and `b_end`. The last step of the function is to call itself, so if tail call optimization is implemented, the call stack always has `O(1)` records.
+- Аналогично анализу по времени: число шагов рекурсии зависит от того, сколько итераций нужно, чтобы опустошить массив. В худшем случае нужно `O(log m + log n)` шагов.
+- Во время рекурсии храним только 4 указателя: `a_start`, `a_end`, `b_start`, `b_end`. Последний шаг функции — вызов самой себя, поэтому при оптимизации хвостовой рекурсии стек всегда `O(1)`.
 
 ---
 
-## Approach 3: A Better Binary Search
+## Подход 3: улучшенный бинарный поиск
 
-### Intuition
+### Идея
 
-Recall the previous approach where we perform a binary search over the "merged" array consisting of `nums1` and `nums2`, resulting in a time complexity of `O(log(m · n))`. We could further improve the algorithm by performing the binary search only on the smaller array of `nums1` and `nums2`, thus the time complexity is reduced to `O(log(min(m, n)))`.
+В предыдущем подходе бинарный поиск шёл по «объединённому» массиву из `nums1` и `nums2` со сложностью `O(log(m · n))`. Можно улучшить алгоритм: искать только по меньшему из массивов, тогда сложность станет `O(log(min(m, n)))`.
 
-The main idea is similar to approach 2, where we need to find a point of partition in both arrays such that the maximum of the smaller half is less than or equal to the minimum of the larger half.
+Основная идея похожа на подход 2: нужно найти точку разбиения обоих массивов так, чтобы максимум меньшей половины был ≤ минимума большей половины.
 
-However, instead of partitioning over the merged arrays, we can only focus on partitioning the smaller array (let's call this array `A`). Suppose the partition index is `partitionA`, we specify that the smaller half contains `(m + n + 1) / 2` elements, and we can use this feature to our advantage by directly making `partitionB` equal to `(m + n + 1) / 2 - partitionA`, thus the smaller halves of both arrays always contain a total of `(m + n + 1) / 2` elements, as shown in the picture below.
+Но вместо разбиения объединённого массива достаточно разбивать меньший массив (назовём его `A`). Пусть индекс разбиения — `partitionA`. Меньшая половина должна содержать `(m + n + 1) / 2` элементов, поэтому можно сразу взять `partitionB = (m + n + 1) / 2 - partitionA`. Тогда меньшие половины обоих массивов вместе всегда содержат `(m + n + 1) / 2` элементов, как на картинке ниже.
 
 ![](figures/2_0.png)
 
-The next step is to compare these edge elements.
+Дальше сравниваем граничные элементы.
 
 ![](figures/2_1.png)
 
-If both `maxLeftA <= minRightB` and `maxLeftB <= minRightA` hold, it means that we have partitioned arrays at the correct place.
+Если одновременно верны `maxLeftA <= minRightB` и `maxLeftB <= minRightA`, разбиение найдено правильно.
 
-- The smaller half consists of two sections `A_left` and `B_left`.
-- The larger half consists of two sections `A_right` and `B_right`.
-- We just need to find the maximum value from the smaller half as `max(A[maxLeftA], B[maxLeftB])` and the minimum value from the larger half as `min(A[minRightA], B[minRightB])`. The median value depends on these four boundary values and the total length of the input arrays and we can compute it by situation.
+- Меньшая половина состоит из участков `A_left` и `B_left`.
+- Большая половина состоит из участков `A_right` и `B_right`.
+- Нужно взять максимум меньшей половины `max(A[maxLeftA], B[maxLeftB])` и минимум большей половины `min(A[minRightA], B[minRightB])`. Медиана зависит от этих четырёх граничных значений и общей длины массивов.
 
 ![](figures/2_2.png)
 
-If `maxLeftA > minRightB`, it implies that `maxLeftA` is too large to be in the smaller half and we should look for a smaller partition value of `A`.
+Если `maxLeftA > minRightB`, то `maxLeftA` слишком велик для меньшей половины — нужно искать меньшее значение `partitionA`.
 
 ![](figures/2_3.png)
 
-Otherwise, it denotes that `minRightA` is too small to be in the larger half and we should look for a larger partition value of `A`.
+Иначе `minRightA` слишком мал для большей половины — нужно искать большее значение `partitionA`.
 
 ![](figures/2_4.png)
 
-### Algorithm
+### Алгоритм
 
-Assuming `nums1` to be the smaller array (If `nums2` is smaller, we can swap them). Let `m`, `n` represent the size of `nums1` and `nums2`, respectively.
+Считаем `nums1` меньшим массивом (если меньше `nums2`, меняем их местами). Пусть `m`, `n` — размеры `nums1` и `nums2`.
 
-1. Define the search space for the partitioning index `partitionA` by setting boundaries as `left = 0` and `right = m`.
-2. While `left <= right` holds, do the following.
-3. Compute the partition index of `nums1` as `partitionA = (left + right) / 2`. Consequently, the partition index of `nums2` is `(m + n + 1) / 2 - partitionA`.
-4. Obtain the edge elements:
-   - Determine the maximum value of the section `A_left` as `maxLeftA = nums1[partitionA - 1]`. If `partitionA - 1 < 0`, set it as `maxLeftA = float(-inf)`.
-   - Determine the minimum value of the section `A_right` as `minRightA = nums1[partitionA]`. If `partitionA >= m`, set it as `minRightA = float(inf)`.
-   - Determine the maximum value of the section `B_left` as `maxLeftB = nums2[partitionB - 1]`. If `partitionB - 1 < 0`, set it as `maxLeftB = float(-inf)`.
-   - Determine the minimum value of the section `B_right` as `minRightB = nums2[partitionB]`. If `partitionB >= n`, set it as `minRightB = float(inf)`.
-5. Compare and recalculate: compare `maxLeftA` with `minRightB` and `maxLeftB` with `minRightA`.
-   - If `maxLeftA > minRightB`, it means the `maxLeftA` is too large to be in the smaller half, so we update `right = partitionA - 1` to move to the left half of the search space.
-   - If `maxLeftB > minRightA`, it means that we are too far on the left side for `partitionA` and we need to go to the right half of the search space by updating `left = partitionA + 1`.
-6. Repeat step 4.
-7. When both `maxLeftA <= minRightB` and `maxLeftB <= minRightA` are true:
-   - If `(m + n) % 2 = 0`, the median value is the average of the maximum value of the smaller half and the minimum value of the larger half, given by `answer = (max(maxLeftA, maxLeftB) + min(minRightA, minRightB)) / 2`.
-   - Otherwise, the median value is the maximum value of the smaller half, given by `answer = max(maxLeftA, maxLeftB)`.
+1. Задать пространство поиска для индекса разбиения `partitionA`: `left = 0`, `right = m`.
+2. Пока `left <= right`, делать следующее.
+3. Вычислить индекс разбиения `nums1`: `partitionA = (left + right) / 2`. Тогда индекс разбиения `nums2`: `(m + n + 1) / 2 - partitionA`.
+4. Получить граничные элементы:
+   - максимум участка `A_left`: `maxLeftA = nums1[partitionA - 1]`; если `partitionA - 1 < 0`, то `maxLeftA = float(-inf)`;
+   - минимум участка `A_right`: `minRightA = nums1[partitionA]`; если `partitionA >= m`, то `minRightA = float(inf)`;
+   - максимум участка `B_left`: `maxLeftB = nums2[partitionB - 1]`; если `partitionB - 1 < 0`, то `maxLeftB = float(-inf)`;
+   - минимум участка `B_right`: `minRightB = nums2[partitionB]`; если `partitionB >= n`, то `minRightB = float(inf)`.
+5. Сравнить и пересчитать: сравнить `maxLeftA` с `minRightB` и `maxLeftB` с `minRightA`.
+   - если `maxLeftA > minRightB`, `maxLeftA` слишком велик для меньшей половины — обновить `right = partitionA - 1` и уйти в левую половину пространства поиска;
+   - если `maxLeftB > minRightA`, слишком далеко слева для `partitionA` — уйти в правую половину: `left = partitionA + 1`.
+6. Повторить шаг 4.
+7. Когда одновременно `maxLeftA <= minRightB` и `maxLeftB <= minRightA`:
+   - если `(m + n) % 2 = 0`, медиана — среднее максимума меньшей половины и минимума большей: `answer = (max(maxLeftA, maxLeftB) + min(minRightA, minRightB)) / 2`;
+   - иначе медиана — максимум меньшей половины: `answer = max(maxLeftA, maxLeftB)`.
 
-### Implementation
+### Реализация
 
 ```javascript
 var findMedianSortedArrays = function (nums1, nums2) {
@@ -540,14 +539,14 @@ class Solution:
                 left = partitionA + 1
 ```
 
-### Complexity Analysis
+### Анализ сложности
 
-Let `m` be the size of array `nums1` and `n` be the size of array `nums2`.
+Пусть `m` — размер `nums1`, а `n` — размер `nums2`.
 
-**Time complexity:** `O(log(min(m, n)))`
+**Время:** `O(log(min(m, n)))`
 
-- We perform a binary search over the smaller array of size `min(m, n)`.
+- Бинарный поиск идёт по меньшему массиву размера `min(m, n)`.
 
-**Space complexity:** `O(1)`
+**Память:** `O(1)`
 
-- The algorithm only requires a constant amount of additional space to store and update a few parameters during the binary search.
+- Нужно лишь константное дополнительное место под несколько параметров бинарного поиска.
